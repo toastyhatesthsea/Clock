@@ -10,36 +10,37 @@ Please remove this comment when submitting your solution.
 */
 
 
+import java.util.Objects;
+
 public class Clock
 {
 
-
     public int minutes, hours;
-
 
     public Clock(int aHours, int aMinutes)
     {
-        /*
-        int minutesFromHours = aHours * 60;
-        int totalMinutes = minutesFromHours + aMinutes;
 
-        int totalHours = totalMinutes / 60;
-        totalHours = totalHours % 24;
-        int remainingMinutes = totalMinutes % 60;
+        clockCreator(aHours, aMinutes);
+    }
 
-        if (totalHours < 0)
-        {
-            totalHours = 24 + totalHours;
-        }
+    public void add(int minutes)
+    {
+        clockCreator(0, minutes);
+    }
 
-        this.minutes = remainingMinutes;
-        this.hours = totalHours; */
+    /**
+     * A helper function that creates a 24 hour clock according to the hours and minutes
+     * @param aHours int
+     * @param aMinutes int
+     */
+    public void clockCreator(int aHours, int aMinutes)
+    {
 
         int totalHours;
-        int totalMinutes = aMinutes % 60;
+        int totalMinutes = (this.minutes + aMinutes) % 60;
 
-        int addedHours = aMinutes / 60;
-        totalHours = (aHours + addedHours) % 24;
+        int addedHours = (this.minutes + aMinutes) / 60;
+        totalHours = (this.hours + aHours + addedHours) % 24;
 
         if (totalHours < 0)
         {
@@ -49,22 +50,15 @@ public class Clock
         if (totalMinutes < 0)
         {
             totalHours -= 1;
+            if (totalHours < 0)
+            {
+                totalHours = 23;
+            }
             totalMinutes += 60;
         }
 
         this.hours = totalHours;
         this.minutes = totalMinutes;
-    }
-
-
-    private int calculateMinutes(int hours)
-    {
-        return hours * 60;
-    }
-
-    public void add(int minutes)
-    {
-
     }
 
     @Override
@@ -94,5 +88,20 @@ public class Clock
         answer = hours + ":" + minutes;
         return answer;
 
+    }
+
+    @Override
+    public boolean equals(Object o)
+    {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Clock clock = (Clock) o;
+        return minutes == clock.minutes && hours == clock.hours;
+    }
+
+    @Override
+    public int hashCode()
+    {
+        return Objects.hash(minutes, hours);
     }
 }
